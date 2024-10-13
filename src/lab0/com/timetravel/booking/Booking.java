@@ -21,7 +21,6 @@ public class Booking {
         this.totalPrice = totalPrice;
     }
 
-    // Getters and Setters
     public String getBookingId() {
         return bookingId;
     }
