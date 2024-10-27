@@ -12,7 +12,8 @@
 ## Used Design Patterns:
 * Singleton - restricts the instantiation of a class to a singular instance
 * Builder - separates the construction of a complex object from its representation
-* Abstract Factory - Dependency Inversion Principle
+* Abstract Factory - create families of related objects without imposing their concrete classes
+* Prototype - create prototypical instance, which is cloned to produce new objects
 
 
 ## Implementation
@@ -34,52 +35,57 @@ public static FoodComboDelivery getInstance() {
 }
 ```
 
-###  Interface Segregation Principle
-
-- **ITechnicalTimeMachine**  is an interface related to `ITimeMachine` and thus doesn't force the client to implement methods it doesnt use
+###  Builder
 
 
 ```java
-
-public class TechnicalTimeMachine implements ITechnicalTimeMachine, ITimeMachine {}
-
-```
-```java
-public interface ITimeMachine {
-    String getVehicleName();
-    String getModel();
-    String getManufacturer();
-    int getYearOfManufacture();
-}
-
-
-public interface ITechnicalTimeMachine {
-    String getMotorModel();
+public interface CocktailBuilder {
+    CocktailBuilder setPrice(int price);
+    CocktailBuilder setName(String name);
+    CocktailBuilder setQuantity(float quantity);
+    Cocktail build();
 }
 
 ```
 
-### Dependency Inversion Principle
 
-- **Booking** class instead of directly addressing `Traveler` class, it depends on abstraction of this class
-
+### Abstract Factory
 
 ```java
- public Booking(String bookingId, ITraveler traveler, ITimePeriod timePeriod, LocalDateTime bookingDateTime, double totalPrice) {
-        this.bookingId = bookingId;
-        this.traveler = traveler;//Dependency Inversion Principle
-        this.timePeriod = timePeriod; 
-        this.bookingDateTime = bookingDateTime;
-        this.totalPrice = totalPrice;
+
+public abstract class Order {
+    ...
+
+    public abstract Dish createDish();
+    public abstract Cocktail createCocktail();
+}
+
+```
+
+```java
+public class PlacinteOrder extends Order {
+    @Override
+    public Dish createDish() {
+        return new PlacinteDishBuilder()
+                .setPrice(80)
+                .setName("Placinta cu cascaval")
+                .setIngredient1("placinta")
+                .setIngredient2("cascaval")
+                .build();
     }
+
+    @Override
+    public Cocktail createCocktail() {
+        return new PlacinteCocktailBuilder()
+                .setPrice(12)
+                .setName("Wine")
+                .setQuantity(0.5f)
+                .build();
+    }
+}
 
 ```
 
 ## Conclusions / Screenshots / Results
 
 
-
-In this lab, I  applied SOLID principles, enhancing code maintainability and flexibility. By enforcing single
-responsibility, segregating interfaces, and utilizing dependency inversion, I created a  time-travel booking system what
-can grow and adapt to demand. These practices promote cleaner code, easier updates, and a scalable architecture, equipping
-us for future software development challenges.

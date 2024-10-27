@@ -17,6 +17,13 @@ public class AndyDish implements Dish {
         this.ingredient2 = ingredient2;
         this.ingredient3 = ingredient3;
     }
+    public AndyDish(AndyDish andyDish) {
+        this.price = andyDish.price;
+        this.name = andyDish.name;
+        this.ingredient1 = andyDish.ingredient1;
+        this.ingredient2 = andyDish.ingredient2;
+        this.ingredient3 = andyDish.ingredient3;
+    }
 
 
     @Override
@@ -40,5 +47,10 @@ public class AndyDish implements Dish {
         System.out.println("...");
         System.out.println("Done");
 
+    }
+
+    @Override
+    public Dish clone() {
+        return new AndyDish(this);
     }
 }

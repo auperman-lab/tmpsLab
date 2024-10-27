@@ -14,6 +14,11 @@ public class PlacinteCocktail implements Cocktail {
         this.name = name;
         this.quantity = quantity;
     }
+    public PlacinteCocktail(PlacinteCocktail placinteCocktail){
+        this.price = placinteCocktail.price;
+        this.name = placinteCocktail.name;
+        this.quantity = placinteCocktail.quantity;
+    }
 
     @Override
     public String getName() {
@@ -28,6 +33,11 @@ public class PlacinteCocktail implements Cocktail {
     @Override
     public float getServingSize() {
         return quantity;
+    }
+
+    @Override
+    public Cocktail clone() {
+        return new PlacinteCocktail(this);
     }
 
 }

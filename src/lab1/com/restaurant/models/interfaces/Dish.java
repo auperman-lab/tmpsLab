@@ -1,7 +1,8 @@
 package lab1.com.restaurant.models.interfaces;
 
-public interface Dish {
+public interface Dish extends Prototype{
      String getName();
      double getPrice();
-    void prepare();
+     void prepare();
+     Dish clone();
 }

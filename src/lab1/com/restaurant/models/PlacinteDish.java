@@ -18,7 +18,13 @@ public class PlacinteDish implements Dish {
         this.ingredient3 = ingredient3;
     }
 
-
+    public PlacinteDish(PlacinteDish placinteDish){
+        this.price = placinteDish.price;
+        this.name = placinteDish.name;
+        this.ingredient1 = placinteDish.ingredient1;
+        this.ingredient2 = placinteDish.ingredient2;
+        this.ingredient3 = placinteDish.ingredient3;
+    }
 
     @Override
     public String getName() {
@@ -41,5 +47,10 @@ public class PlacinteDish implements Dish {
         System.out.println("...");
         System.out.println("Done");
 
+    }
+
+    @Override
+    public Dish clone() {
+        return new PlacinteDish(this);
     }
 }

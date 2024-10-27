@@ -8,9 +8,14 @@ public class AndyCocktail implements Cocktail {
     private final float quantity;
 
     public AndyCocktail(int price, String name, float quantity) {
-        this.name = name;
-        this.price = price;
-        this.quantity = quantity;
+        this.name   = name;
+        this.price  = price;
+        this.quantity   = quantity;
+    }
+    public AndyCocktail(AndyCocktail andyCocktail){
+        this.name   = andyCocktail.name;
+        this.price  = andyCocktail.price;
+        this.quantity   = andyCocktail.quantity;
     }
 
     @Override
@@ -26,6 +31,12 @@ public class AndyCocktail implements Cocktail {
     @Override
     public float getServingSize() {
         return quantity;
+    }
+
+
+    @Override
+    public Cocktail clone() {
+        return new AndyCocktail(this);
     }
 
 }
