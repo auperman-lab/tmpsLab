@@ -13,9 +13,7 @@ import lab3.com.restaurant.service.order.CremeOrder;
 import lab3.com.restaurant.service.order.OrderResult;
 import lab3.com.restaurant.service.order.PlacinteOrder;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 public class FoodComboDelivery {
     private static volatile FoodComboDelivery instance;
@@ -24,6 +22,8 @@ public class FoodComboDelivery {
     private final CremeOrder cremeOrder;
     private final IBill bill;
     private static PayStrategy strategy;
+    private List<OrderResult> orderResults;
+    private Deque<FCDMemento> stateHistory;
 
 
     private FoodComboDelivery() {
@@ -37,6 +37,8 @@ public class FoodComboDelivery {
                 )
         );
         this.bill = new BillProxy(realBill);
+
+        this.stateHistory = new ArrayDeque<>(3);
 
 
     }
@@ -57,7 +59,7 @@ public class FoodComboDelivery {
     public void start() {
         Scanner scanner = new Scanner(System.in);
         boolean running = true;
-        List<OrderResult> orderResults = new ArrayList<>();
+        orderResults = new ArrayList<>();
 
         while (running) {
             System.out.println("1. Order Andy's Combo");
@@ -65,10 +67,12 @@ public class FoodComboDelivery {
             System.out.println("3. Order La Creme de la Creme Combo");
             System.out.println("4. Print Bill");
             System.out.println("5. Pay Order");
-            System.out.println("6. Exit");
+            System.out.println("6. CTRL Z");
+            System.out.println("7. Exit");
             System.out.print("=> ");
 
             int choice = scanner.nextInt();
+
 
             switch (choice) {
                 case 1:
@@ -107,19 +111,51 @@ public class FoodComboDelivery {
                     strategy.collectPaymentDetails();
                     if (strategy.pay(totalBill)) {
                         System.out.println("Payment has been successful.");
+                        orderResults.clear();
                     } else {
                         System.out.println("FAIL! Please, check your data.");
                     }
 
+
                     break;
                 case 6:
+                    restoreSnapshot(stateHistory.removeFirst());
+                    break;
+                case 7:
                     running = false;
                     break;
                 default:
                     System.out.println("Invalid option, please try again.");
 
             }
+            stateHistory.add(takeSnapshot());
+
         }
         scanner.close();
     }
+
+    public FCDMemento takeSnapshot() {
+        return new FCDMemento(orderResults);
+    }
+
+    public void restoreSnapshot(FCDMemento snapshot) {
+        this.orderResults = new ArrayList<>(snapshot.getSavedOrder());
+    }
+
+    private class FCDMemento{
+        private final  List<OrderResult> orderR;
+
+        private FCDMemento(List<OrderResult> orderResults) {
+            this.orderR = new ArrayList<>();
+            for (OrderResult orderResult : orderResults) {
+                this.orderR.add(orderResult.clone()); // Assume OrderResult has a clone() method
+            }        }
+
+        private  List<OrderResult> getSavedOrder() {
+            return this.orderR;
+        }
+
+
+    }
+
 }
