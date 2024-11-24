@@ -148,7 +148,7 @@ public class FoodComboDelivery {
         private FCDMemento(List<OrderResult> orderResults) {
             this.orderR = new ArrayList<>();
             for (OrderResult orderResult : orderResults) {
-                this.orderR.add(orderResult.clone()); // Assume OrderResult has a clone() method
+                this.orderR.add(orderResult.clone());
             }        }
 
         private  List<OrderResult> getSavedOrder() {
