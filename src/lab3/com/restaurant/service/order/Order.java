@@ -1,4 +1,4 @@
-package lab3.com.restaurant.order;
+package lab3.com.restaurant.service.order;
 
 import lab3.com.restaurant.models.interfaces.Cocktail;
 import lab3.com.restaurant.models.interfaces.Dish;

@@ -1,14 +1,17 @@
-package lab3.com.restaurant;
+package lab3.com.restaurant.controller;
 
-import lab3.com.restaurant.bill.Bill;
-import lab3.com.restaurant.bill.BillProxy;
-import lab3.com.restaurant.bill.JsonBill;
-import lab3.com.restaurant.bill.XmlBill;
-import lab3.com.restaurant.models.interfaces.IBill;
-import lab3.com.restaurant.order.AndyOrder;
-import lab3.com.restaurant.order.CremeOrder;
-import lab3.com.restaurant.order.OrderResult;
-import lab3.com.restaurant.order.PlacinteOrder;
+import lab3.com.restaurant.service.payment.PayByCreditCard;
+import lab3.com.restaurant.service.payment.PayByPaypal;
+import lab3.com.restaurant.service.payment.PayStrategy;
+import lab3.com.restaurant.utils.bill.Bill;
+import lab3.com.restaurant.utils.bill.BillProxy;
+import lab3.com.restaurant.utils.bill.JsonBill;
+import lab3.com.restaurant.utils.bill.XmlBill;
+import lab3.com.restaurant.utils.bill.IBill;
+import lab3.com.restaurant.service.order.AndyOrder;
+import lab3.com.restaurant.service.order.CremeOrder;
+import lab3.com.restaurant.service.order.OrderResult;
+import lab3.com.restaurant.service.order.PlacinteOrder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,6 +23,8 @@ public class FoodComboDelivery {
     private final PlacinteOrder placinteOrder;
     private final CremeOrder cremeOrder;
     private final IBill bill;
+    private static PayStrategy strategy;
+
 
     private FoodComboDelivery() {
         this.andyOrder = new AndyOrder();
@@ -59,7 +64,8 @@ public class FoodComboDelivery {
             System.out.println("2. Order La Placinte Combo");
             System.out.println("3. Order La Creme de la Creme Combo");
             System.out.println("4. Print Bill");
-            System.out.println("5. Exit");
+            System.out.println("5. Pay Order");
+            System.out.println("6. Exit");
             System.out.print("=> ");
 
             int choice = scanner.nextInt();
@@ -78,6 +84,35 @@ public class FoodComboDelivery {
                     System.out.println(bill.printBill(orderResults));
                     break;
                 case 5:
+                    if (strategy == null) {
+                        System.out.println("Please, select a payment method: \n" +
+                                "1 - PalPay" + "\n" +
+                                "2 - Credit Card");
+                        int paymentMethod = scanner.nextInt();
+
+
+                        if (paymentMethod == 1 ) {
+                            strategy = new PayByPaypal();
+                        } else {
+                            strategy = new PayByCreditCard();
+                        }
+                    }
+                    System.out.println(bill.printBill(orderResults));
+
+                    float totalBill = 0;
+                    for (OrderResult orderResult : orderResults) {
+                        totalBill += orderResult.orderPrice();
+                    }
+
+                    strategy.collectPaymentDetails();
+                    if (strategy.pay(totalBill)) {
+                        System.out.println("Payment has been successful.");
+                    } else {
+                        System.out.println("FAIL! Please, check your data.");
+                    }
+
+                    break;
+                case 6:
                     running = false;
                     break;
                 default:

@@ -1,6 +1,6 @@
-package lab3.com.restaurant.models.interfaces;
+package lab3.com.restaurant.utils.bill;
 
-import lab3.com.restaurant.order.OrderResult;
+import lab3.com.restaurant.service.order.OrderResult;
 
 import java.util.List;
 

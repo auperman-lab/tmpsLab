@@ -1,6 +1,6 @@
-package lab3.com.restaurant.order;
+package lab3.com.restaurant.service.order;
 
-import lab3.com.restaurant.FrenchDishAdapter;
+import lab3.com.restaurant.utils.FrenchDishAdapter;
 import lab3.com.restaurant.models.CremeDeLaCremeNourriture;
 import lab3.com.restaurant.models.builders.AndyCocktailBuilder;
 import lab3.com.restaurant.models.interfaces.Cocktail;
